@@ -7,7 +7,10 @@ type Props = {};
 
 const Pomodoro = (props: Props) => {
   return (
-    <Tabs defaultValue="account" className="w-[400px]">
+    <Tabs
+      defaultValue="pomodoro"
+      className="w-[400px] flex items-center flex-col mt-4"
+    >
       <TabsList>
         <TabsTrigger value="pomodoro">Pomodoro</TabsTrigger>
         <TabsTrigger value="short">Short break</TabsTrigger>
