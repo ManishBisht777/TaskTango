@@ -53,5 +53,22 @@ model User {
     accounts Account[]
     sessions Session[]
 
+    tasks    Task[]
+
     @@map(name: "users")
 }
+
+model Task {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    description String
+    dueDate     String
+    priority    String
+    status      String
+    tomatoes    Int
+    authorId    String @db.ObjectId
+
+    author User @relation(fields: [authorId], references: [id])
+}
+
+

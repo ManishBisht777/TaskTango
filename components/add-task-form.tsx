@@ -20,30 +20,74 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
+import { Task } from "@prisma/client";
 
-type Props = {};
+type Props = {
+  edit?: boolean;
+  task?: Task;
+};
 
 type FormData = z.infer<typeof taskSchema>;
 
-const AddTaskForm = (props: Props) => {
+const AddTaskForm = ({ edit, task }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm<FormData>({
     resolver: zodResolver(taskSchema),
+    defaultValues: {
+      title: task?.title || "",
+      description: task?.description || "",
+      dueDate: task?.dueDate || "",
+      priority: task?.priority || "",
+      status: task?.status || "",
+    },
   });
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    console.log(data);
+    const url = edit ? `/api/task/${task?.id}` : "/api/task";
+    const method = edit ? "PATCH" : "POST";
+
+    console.log(url, method);
+
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: data.title,
+        description: data.description,
+        dueDate: data.dueDate,
+        priority: data.priority,
+        status: data.status,
+      }),
+    });
 
     setIsLoading(false);
+
+    if (!response?.ok) {
+      return toast({
+        title: "Something went wrong.",
+        description: `Your task was not  ${
+          edit ? "updated" : "Saved"
+        } Please try again.`,
+        variant: "destructive",
+      });
+    }
+
+    router.refresh();
+    return toast({
+      description: `Your task has been ${edit ? "updated" : "Saved"}`,
+    });
   }
 
   return (
@@ -147,46 +191,9 @@ const AddTaskForm = (props: Props) => {
             />
           </div>
         </div>
-
-        {/* <div className="grid gap-1">
-            <p className="sr-only">Description</p>
-            <Input type="text" placeholder="Description" disabled={isLoading} />
-          </div>
-          <div className="grid gap-1">
-            <p className="sr-only">Due-Date</p>
-            <Input type="date" disabled={isLoading} placeholder="Due Date" />
-          </div>
-          <div className="flex gap-2">
-            <div className="grid gap-1">
-              <p className="sr-only"></p>
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-1">
-              <p className="sr-only"></p>
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Staus" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="inprogress">In Progress</SelectItem>
-                  <SelectItem value="todo">Todo</SelectItem>
-                  <SelectItem value="done">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div> */}
         <button className={cn(buttonVariants())} disabled={isLoading}>
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Create
+          {edit ? "Update" : "Create"}
         </button>
       </form>
     </Form>
