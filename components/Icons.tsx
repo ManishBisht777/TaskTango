@@ -11,6 +11,8 @@ import {
   ChevronLeft,
   Plus,
   ClipboardList,
+  LogOut,
+  User,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -26,6 +28,8 @@ export const Icons = {
   left: ChevronLeft,
   add: Plus,
   task: ClipboardList,
+  logout: LogOut,
+  user: User,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
