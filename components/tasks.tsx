@@ -1,23 +1,18 @@
 import React from "react";
-import { PostOperations } from "./task-operation";
+import { TaskOperations } from "./task-operation";
+import { Task } from "@prisma/client";
 
-type Props = {};
-
-const Tasks = (props: Props) => {
+type Props = { task: Task };
+const Tasks = async ({ task }: Props) => {
   return (
-    <div className="flex gap-2 border rounded p-6">
+    <div className="flex gap-2 border rounded p-6 justify-between">
       <div className="">
         <h3 className="inline-block font-bold font-heading text-lg lg:text-xl">
-          Task One
+          {task.title}
         </h3>
-        <p className="text-sm text-muted-foreground">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
-          molestiae unde nemo animi delectus blanditiis vitae doloribus, facilis
-          nesciunt optio non! Consectetur illum id sed facilis tempore
-          voluptatibus perferendis odio?
-        </p>
+        <p className="text-sm text-muted-foreground">{task.description}</p>
       </div>
-      <PostOperations />
+      <TaskOperations task={task} />
     </div>
   );
 };

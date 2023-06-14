@@ -13,7 +13,6 @@ import AddTaskForm from "./add-task-form";
 export function AddTask() {
   return (
     <div className="flex justify-between my-4">
-      <h3 className="font-bold text-xl">My Tasks</h3>
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline">

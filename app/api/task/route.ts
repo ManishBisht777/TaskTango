@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/sessions";
 import { z } from "zod";
 
-const taskCreateSchema = z.object({
+export const taskCreateSchema = z.object({
   title: z.string().min(3).max(128),
   description: z.string(),
   dueDate: z.string().nonempty(),
@@ -34,11 +34,10 @@ export async function POST(req: Request) {
   }
 
   const json = await req.json();
-  console.log(json);
   const body = taskCreateSchema.parse(json);
 
   try {
-    const post = await prisma.task.create({
+    const task = await prisma.task.create({
       data: {
         title: body.title,
         description: body.description,
@@ -50,12 +49,13 @@ export async function POST(req: Request) {
       },
     });
 
-    return new Response(JSON.stringify(post));
+    return new Response(JSON.stringify(task));
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.log(error.message);
       return new Response(JSON.stringify(error.issues), { status: 422 });
     }
+    console.log(error);
     return new Response(null, { status: 500 });
   }
 }
