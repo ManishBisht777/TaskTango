@@ -52,6 +52,7 @@ model User {
 
     accounts Account[]
     sessions Session[]
+
     tasks    Task[]
 
     @@map(name: "users")
@@ -69,3 +70,5 @@ model Task {
 
     author User @relation(fields: [authorId], references: [id])
 }
+
+
