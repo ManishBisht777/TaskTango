@@ -5,13 +5,16 @@ Do Tasks With Focus
 ## Roadmap
 
 - Sprint 1
-  - Initital UI
-  - Auth
+  - ~Initital UI~
+  - ~Auth~
 - Sprint 2
-  - Backend (Task CRUD)
+  - ~Backend (Task CRUD)~
+  - Timer
 - Sprint 3
-  - Analytics
+  - Timer functionality
 - Sprint 4
+  - Analytics
+- Sprint 5
   - Nail in the coffin
 
 ## Getting Started
