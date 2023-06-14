@@ -26,6 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "./ui/use-toast";
 
 type Props = {};
 
@@ -43,7 +44,33 @@ const AddTaskForm = (props: Props) => {
 
     console.log(data);
 
+    const response = await fetch("/api/task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: data.title,
+        description: data.description,
+        dueDate: data.dueDate,
+        priority: data.priority,
+        status: data.status,
+      }),
+    });
+
     setIsLoading(false);
+
+    if (!response?.ok) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your task was not saved. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    return toast({
+      description: "Your task has been saved.",
+    });
   }
 
   return (
