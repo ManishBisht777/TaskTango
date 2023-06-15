@@ -4,6 +4,7 @@ import { AddTask } from "./add-task";
 
 import { getSession } from "@/lib/sessions";
 import { prisma } from "@/lib/db";
+import Filter from "./filter";
 
 type Props = {};
 
@@ -25,7 +26,10 @@ const TaskList = async (props: Props) => {
 
   return (
     <div className="w-full">
-      <AddTask />
+      <div className="flex justify-between items-center gap-2">
+        <Filter />
+        <AddTask />
+      </div>
       <div className="flex flex-col gap-4">
         {tasks &&
           tasks.map((task) => {

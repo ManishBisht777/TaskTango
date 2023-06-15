@@ -9,7 +9,7 @@ Do Tasks With Focus
   - ~Auth~
 - Sprint 2
   - ~Backend (Task CRUD)~
-  - Timer
+  - ~Timer~
 - Sprint 3
   - Timer functionality
 - Sprint 4
