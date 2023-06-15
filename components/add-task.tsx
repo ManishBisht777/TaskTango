@@ -15,7 +15,7 @@ export function AddTask() {
     <div className="flex justify-between my-4">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">
+          <Button className="w-max" variant="outline">
             <Icons.add className="w-4 h-4 mr-2" /> Add Tasks
           </Button>
         </DialogTrigger>

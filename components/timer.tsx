@@ -3,8 +3,12 @@
 import React, { useContext } from "react";
 import { Icons } from "./Icons";
 import { Button } from "./ui/button";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
 import { TimerContext } from "@/context/TimerContext";
+import { cn } from "@/lib/utils";
 
 type Props = {};
 
@@ -86,10 +90,11 @@ const Timer = (props: Props) => {
 
   return (
     <div className="flex flex-col items-center w-48">
-      <p>{mode}</p>
-      <CircularProgressbar
+      <h3 className="text-xl font-bold uppercase text-slate-600 my-4">
+        {mode}
+      </h3>
+      <CircularProgressbarWithChildren
         value={percentage}
-        text={minutes + ":" + seconds}
         strokeWidth={4}
         styles={buildStyles({
           pathTransitionDuration: 0.5,
@@ -99,28 +104,41 @@ const Timer = (props: Props) => {
               : mode === "ShortBreak"
               ? `rgba(128,107,206,${percentage / 100})`
               : `rgba(116,215,69,${percentage / 100})`,
-          textColor:
-            mode === "Work"
-              ? "rgb(254,124,26)"
-              : mode === "ShortBreak"
-              ? "rgb(128,107,206)"
-              : "rgb(116,215,69)",
+
           trailColor: "#d6d6d6",
           backgroundColor: "#3e98c7",
         })}
-      />
-
-      <p className="text-xl">{state.tomatoes}</p>
+      >
+        <div
+          className={cn(
+            "flex flex-col gap-1 items-center",
+            mode === "Work"
+              ? "text-[rgb(254,124,26)]"
+              : mode === "ShortBreak"
+              ? "text-[rgb(128,107,206)]"
+              : "text-[rgb(116,215,69)]"
+          )}
+        >
+          <p className="font-bold text-4xl">{minutes + ":" + seconds}</p>
+          <p className="text-sm">
+            {mode === "Work"
+              ? "Keep-going"
+              : mode === "ShortBreak"
+              ? "Refresh"
+              : "Chill"}
+          </p>
+        </div>
+      </CircularProgressbarWithChildren>
 
       <div className="flex items-center gap-4 mt-4">
         <Button
           variant="secondary"
-          className="rounded-full w-10 h-10 flex justify-center items-center p-1"
+          className="rounded-full w-12 h-12 flex justify-center items-center p-1"
         >
           <Icons.reset className="w-4 h-4 text-slate-600" />
         </Button>
         <Button
-          className="rounded-full w-10 h-10 flex justify-center items-center p-1"
+          className="rounded-full w-12 h-12 flex justify-center items-center p-1"
           onClick={() => {
             setIsPaused(!isPaused);
             isPausedRef.current = !isPaused;
@@ -134,7 +152,7 @@ const Timer = (props: Props) => {
         </Button>
         <Button
           variant="secondary"
-          className="rounded-full w-10 h-10 flex justify-center items-center p-1"
+          className="rounded-full w-12 h-12 flex justify-center items-center p-1"
         >
           <Icons.cross className="w-4 h-4 text-slate-600" />
         </Button>
