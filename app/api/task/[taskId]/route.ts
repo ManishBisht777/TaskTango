@@ -9,6 +9,10 @@ const routeContextSchema = z.object({
   }),
 });
 
+const tomatoUpdateSchema = z.object({
+  tomatoes: z.number(),
+});
+
 export async function DELETE(
   req: Request,
   context: z.infer<typeof routeContextSchema>
@@ -52,8 +56,21 @@ export async function PATCH(
 
   try {
     const json = await req.json();
-    const body = taskCreateSchema.parse(json);
 
+    if (json.tomatoes) {
+      const task = await prisma.task.update({
+        where: {
+          id: params.taskId,
+        },
+        data: {
+          tomatoes: json.tomatoes,
+          status: "done",
+        },
+      });
+      return new Response(JSON.stringify(task));
+    }
+
+    const body = taskCreateSchema.parse(json);
     const task = await prisma.task.update({
       where: {
         id: params.taskId,

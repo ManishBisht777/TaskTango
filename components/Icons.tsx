@@ -17,6 +17,7 @@ import {
   Cherry,
   SlidersHorizontal,
   Search,
+  Power,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -38,6 +39,7 @@ export const Icons = {
   cherry: Cherry,
   filter: SlidersHorizontal,
   search: Search,
+  start: Power,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

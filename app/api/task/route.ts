@@ -8,6 +8,7 @@ export const taskCreateSchema = z.object({
   dueDate: z.string().nonempty(),
   status: z.string().nonempty(),
   priority: z.string().nonempty(),
+  tomatoes: z.number().optional(),
 });
 
 export async function GET() {
