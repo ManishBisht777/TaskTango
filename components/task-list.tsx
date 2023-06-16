@@ -1,10 +1,10 @@
 import React from "react";
-import Tasks from "./tasks";
 import { AddTask } from "./add-task";
 
 import { getSession } from "@/lib/sessions";
 import { prisma } from "@/lib/db";
 import Filter from "./filter";
+import TaskComp from "./task-comp";
 
 type Props = {};
 
@@ -30,12 +30,7 @@ const TaskList = async (props: Props) => {
         <Filter />
         <AddTask />
       </div>
-      <div className="flex flex-col gap-4">
-        {tasks &&
-          tasks.map((task) => {
-            return <Tasks key={task.id} task={task} />;
-          })}
-      </div>
+      <TaskComp tasks={tasks} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema } from "@/lib/validations/task";
@@ -27,6 +27,7 @@ import {
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Task } from "@prisma/client";
+import { TaskContext } from "@/context/TaskContext";
 
 type Props = {
   edit?: boolean;
@@ -38,6 +39,7 @@ type FormData = z.infer<typeof taskSchema>;
 const AddTaskForm = ({ edit, task }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
+  const { dispatch } = useContext(TaskContext);
 
   const form = useForm<FormData>({
     resolver: zodResolver(taskSchema),
@@ -83,6 +85,15 @@ const AddTaskForm = ({ edit, task }: Props) => {
         variant: "destructive",
       });
     }
+
+    const updatedTask = await response.json();
+
+    dispatch({
+      type: "ADD_TASK",
+      payload: {
+        task: updatedTask,
+      },
+    });
 
     router.refresh();
     return toast({
