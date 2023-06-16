@@ -9,8 +9,34 @@ import {
 } from "react-circular-progressbar";
 import { TimerContext } from "@/context/TimerContext";
 import { cn } from "@/lib/utils";
+import { toast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type Props = {};
+
+async function updateTask(taskId: string, tomatoes: number) {
+  const response = await fetch(`api/task/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tomatoes: tomatoes,
+    }),
+  });
+
+  if (!response.ok) {
+    return toast({
+      title: "Something went wrong",
+      description: `${tomatoes} Tomatoes Spend in this task complete 1 tomato to finsih task`,
+      variant: "destructive",
+    });
+  }
+
+  return toast({
+    description: "Task Updated",
+  });
+}
 
 const Timer = (props: Props) => {
   const workTime = 0.05;
@@ -28,6 +54,15 @@ const Timer = (props: Props) => {
   const isPausedRef = React.useRef(isPaused);
   const modeRef = React.useRef(mode);
   const tomatoRef = React.useRef(tomatoes);
+
+  const router = useRouter();
+  function resetTimer() {
+    secondsLeftRef.current = workTime * 60;
+    setSecondsleft(workTime * 60);
+
+    setMode("Work");
+    modeRef.current = "Work";
+  }
 
   React.useEffect(() => {
     function switchMode() {
@@ -134,12 +169,34 @@ const Timer = (props: Props) => {
         <Button
           variant="secondary"
           className="rounded-full w-12 h-12 flex justify-center items-center p-1"
+          onClick={() => {
+            if (!state.taskId)
+              return toast({
+                title: "Not Possible",
+                description: "Please Select a task to focus",
+                variant: "destructive",
+              });
+
+            setIsPaused(true);
+            isPausedRef.current = true;
+            updateTask(state.taskId, state.tomatoes);
+            dispatch({ type: "RESET" });
+            resetTimer();
+            router.refresh();
+          }}
         >
           <Icons.reset className="w-4 h-4 text-slate-600" />
         </Button>
         <Button
           className="rounded-full w-12 h-12 flex justify-center items-center p-1"
           onClick={() => {
+            if (!state.taskId)
+              return toast({
+                title: "Not Possible",
+                description: "Please Select a task to focus",
+                variant: "destructive",
+              });
+
             setIsPaused(!isPaused);
             isPausedRef.current = !isPaused;
           }}

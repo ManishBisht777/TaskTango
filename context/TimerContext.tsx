@@ -4,22 +4,29 @@ import React, { Dispatch, createContext, useReducer } from "react";
 
 type StateType = {
   tomatoes: number;
+  taskId: string;
 };
 
 type ActionType = {
   type: string;
+  payload?: {
+    taskId: string;
+  };
 };
 
 const initialState: StateType = {
   tomatoes: 0,
+  taskId: "",
 };
 
-const reducer = (state: StateType, action: ActionType) => {
+const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case "INCREMENT":
       return { ...state, tomatoes: state.tomatoes + 1 };
+    case "START_TASK":
+      return { ...state, tomatoes: 0, taskId: action.payload?.taskId || "" };
     case "RESET":
-      return { ...state, tomatoes: 0 };
+      return { ...state, tomatoes: 0, taskId: "" };
     default:
       return state;
   }

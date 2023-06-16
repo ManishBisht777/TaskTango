@@ -33,6 +33,7 @@ import {
 } from "./ui/dialog";
 import AddTaskForm from "./add-task-form";
 import { Task } from "@prisma/client";
+import { TimerContext } from "@/context/TimerContext";
 
 interface TaskOperationsProps {
   task: Task;
@@ -61,6 +62,7 @@ export function TaskOperations({ task }: TaskOperationsProps) {
   const [showEditDialog, setShowEditDialog] = React.useState<boolean>(false);
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false);
+  const { dispatch } = React.useContext(TimerContext);
 
   const router = useRouter();
 
@@ -72,6 +74,20 @@ export function TaskOperations({ task }: TaskOperationsProps) {
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {task.status === "done" ? null : (
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onSelect={() =>
+                dispatch({ type: "START_TASK", payload: { taskId: task.id } })
+              }
+            >
+              <button className="flex gap-2 items-center">
+                <Icons.start className="w-4 h-4" />
+                Focus
+              </button>
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
             onSelect={() => setShowEditDialog(true)}
@@ -80,7 +96,6 @@ export function TaskOperations({ task }: TaskOperationsProps) {
               <Icons.edit className="w-4 h-4" />
               Edit
             </button>
-            {/* <AddTask /> */}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

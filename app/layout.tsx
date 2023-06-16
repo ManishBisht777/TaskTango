@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { TimerContextProvider } from "@/context/TimerContext";
+import { TaskContextProvider } from "@/context/TaskContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <TimerContextProvider>{children}</TimerContextProvider>
+        <TimerContextProvider>
+          <TaskContextProvider>{children}</TaskContextProvider>
+        </TimerContextProvider>
         <Toaster />
       </body>
     </html>
